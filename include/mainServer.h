@@ -7,10 +7,9 @@
 #ifndef __MAINSERVER_H__
 #define __MAINSERVER_H__
 
-#include "event2/event_struct.h"
 #include <list>
-
-
+#include "event2/event_struct.h"
+#include "protocolType.h"
 
 
 class CMainServer 
@@ -22,7 +21,7 @@ public:
 public:
 	static CMainServer* Instance();
 	static int exitInstance();
-	int initSerevr();
+	int initServer();
 	int startServer();
 	int stopServer();
 
@@ -35,7 +34,7 @@ public:
 	struct event* m_ListenEvent;
 	evutil_socket_t m_LstSock;
 	//struct list<struct event *> m_EventList;
-	struct list<ClientInfo_S *> m_ClientList;
+	std::list<ClientInfo_S *> m_ClientList;
 };
 
 

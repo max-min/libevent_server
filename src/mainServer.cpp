@@ -1,9 +1,13 @@
-#include "MainServer.h"
+
+#include <unistd.h>
+
+#include "mainServer.h"
 #include "common.h"
+#include "event2/event_compat.h"
+#include "event2/event.h"
 
 
-
-CMainServer* m_MainSvrInstance = NULL;
+CMainServer* CMainServer::m_MainSvrInstance = NULL;
 CMainServer::CMainServer()
 {
 
@@ -33,7 +37,7 @@ int CMainServer::exitInstance()
 	return 0;
 }
 
-int CMainServer::initSerevr()
+int CMainServer::initServer()
 {
 	m_EventBase = event_init();
 	if (m_EventBase == NULL)
@@ -107,7 +111,11 @@ int CMainServer::listenNetWork()
 	struct sockaddr_in sin;
 
 	m_LstSock = socket(AF_INET, SOCK_STREAM, 0);
-	assert(m_LstSock > 0);
+	if( m_LstSock <= 0 )
+	{
+		DBG_SRV_INFO("create listen socket error!\n");
+		return -1;
+	}
 	evutil_make_listen_socket_reuseable(m_LstSock);
 
 
